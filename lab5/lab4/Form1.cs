@@ -187,32 +187,32 @@ namespace lab4
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
-
-            // Создаем файловую переменную
-            StreamWriter FS = new StreamWriter(saveFileDialog1.FileName);
-            // или
-            // StreamWriter FS = new StreamWriter(saveFileDialog1.FileName, true, System.Text.Encoding.GetEncoding(1251));
-            // Записываем информацию в файл
-            FS.Write("{0} {1}\n", dataGridView1.RowCount, dataGridView1.ColumnCount);
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                // Создаем файловую переменную
+                StreamWriter FS = new StreamWriter(saveFileDialog1.FileName);
+                // или
+                // StreamWriter FS = new StreamWriter(saveFileDialog1.FileName, true, System.Text.Encoding.GetEncoding(1251));
+                // Записываем информацию в файл
+                FS.Write("{0} {1}\n", dataGridView1.RowCount, dataGridView1.ColumnCount);
+                for (int i = 0; i < dataGridView1.RowCount; i++)
                 {
-                    FS.Write("{0} ", dataGridView1[i, j].Value);
+                    for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                    {
+                        FS.Write("{0} ", dataGridView1[i, j].Value);
+                    }
+                    FS.Write("\n");
                 }
                 FS.Write("\n");
-            }
-            FS.Write("\n");
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                for (int i = 0; i < dataGridView1.RowCount; i++)
                 {
-                    FS.Write("{0} ", dataGridView2[i, j].Value);
+                    for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                    {
+                        FS.Write("{0} ", dataGridView2[i, j].Value);
+                    }
+                    FS.Write("\n");
                 }
-                FS.Write("\n");
-            }
-            // Закрываем файл
-            FS.Close();
+                // Закрываем файл
+                FS.Close();
+            
 
         }
 

@@ -190,31 +190,39 @@ namespace lab4
         {
             saveFileDialog1.ShowDialog();
 
-            // Создаем файловую переменную
-            StreamWriter FS = new StreamWriter(saveFileDialog1.FileName);
-            // или
-            // StreamWriter FS = new StreamWriter(saveFileDialog1.FileName, true, System.Text.Encoding.GetEncoding(1251));
-            // Записываем информацию в файл
-            FS.Write("{0} {1}\n", dataGridView1.RowCount, dataGridView1.ColumnCount);
-            for (int i = 0; i < dataGridView1.RowCount; i++)
+            if (File.Exists(saveFileDialog1.FileName))
             {
-                for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                // Создаем файловую переменную
+                StreamWriter FS = new StreamWriter(saveFileDialog1.FileName);
+                // или
+                // StreamWriter FS = new StreamWriter(saveFileDialog1.FileName, true, System.Text.Encoding.GetEncoding(1251));
+                // Записываем информацию в файл
+                FS.Write("{0} {1}\n", dataGridView1.RowCount, dataGridView1.ColumnCount);
+                for (int i = 0; i < dataGridView1.RowCount; i++)
                 {
-                    FS.Write("{0} ", dataGridView1[i, j].Value);
+                    for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                    {
+                        FS.Write("{0} ", dataGridView1[i, j].Value);
+                    }
+                    FS.Write("\n");
                 }
                 FS.Write("\n");
-            }
-            FS.Write("\n");
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                for (int i = 0; i < dataGridView1.RowCount; i++)
                 {
-                    FS.Write("{0} ", dataGridView2[i, j].Value);
+                    for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                    {
+                        FS.Write("{0} ", dataGridView2[i, j].Value);
+                    }
+                    FS.Write("\n");
                 }
-                FS.Write("\n");
+                // Закрываем файл
+                FS.Close();
             }
-            // Закрываем файл
-            FS.Close();
+            else
+            {
+                MessageBox.Show("Такого файла не существует.", "Ошибка", MessageBoxButtons.OK);
+
+            }
 
         }
 
@@ -353,24 +361,37 @@ namespace lab4
             else
             {
                 MessageBox.Show("Такого файла не существует.", "Ошибка", MessageBoxButtons.OK);
+                oExcel.Quit();
+                oExcel = null;
                 return;
             }
 
             oSheet = (Worksheet)oBook.ActiveSheet;
 
-            dataGridView1.RowCount = int.Parse(oSheet.Cells[1, 1].ToString());
-            dataGridView1.ColumnCount = int.Parse(oSheet.Cells[1, 2].ToString());
-            dataGridView2.RowCount = dataGridView1.RowCount;
-            dataGridView2.ColumnCount = dataGridView1.ColumnCount;
-            for (int i = 1; i <= dataGridView1.RowCount; i++)
-                for (int j = 1; j <= dataGridView1.ColumnCount; j++)
-                {
-                    dataGridView1[j, i].Value = oSheet.Cells[i + 1, j].ToString();
-                    dataGridView2[j, i].Value = oSheet.Cells[i + dataGridView1.RowCount + 2, j].ToString();
-                }
+            try
+            {
+                dataGridView1.RowCount = int.Parse(oSheet.Cells[1, 1].Value.ToString());
+                dataGridView1.ColumnCount = int.Parse(oSheet.Cells[1, 2].Value.ToString());
+                dataGridView2.RowCount = dataGridView1.RowCount;
+                dataGridView2.ColumnCount = dataGridView1.ColumnCount;
+                for (int i = 1; i <= dataGridView1.RowCount; i++)
+                    for (int j = 1; j <= dataGridView1.ColumnCount; j++)
+                    {
+                        dataGridView1[j-1, i-1].Value = oSheet.Cells[i + 1, j].Value.ToString();
+                        dataGridView2[j-1, i-1].Value = oSheet.Cells[i + dataGridView1.RowCount + 2, j].Value.ToString();
+                    }
 
 
-
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK);
+                oBook.Close(true, saveFileDialog2.FileName, Type.Missing);
+                oBook = null;
+                oExcel.Quit();
+                oExcel = null;
+                return;
+            }
             oBook.Close(true, saveFileDialog2.FileName, Type.Missing);
             oBook = null;
             oExcel.Quit();
