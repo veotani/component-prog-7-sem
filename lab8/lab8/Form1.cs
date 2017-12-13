@@ -247,5 +247,11 @@ namespace lab8
         {
 
         }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            tabControl1.Height = Height - 70;
+            tabControl1.Width = Width - 50;
+        }
     }
 }
