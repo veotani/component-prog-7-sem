@@ -38,7 +38,7 @@ namespace lab8
             graph.graph.DrawLine(penAxis, 0, Y, Xmax, Y);
             graph.graph.DrawLine(penAxis, X, 0, X, Ymax);
             double h = 0.1, Xdec = -5, Ydec = f2(Xdec);
-            int d = 20, Xp = Convert.ToInt16(Xdec * d) + X, Yp = -Convert.ToInt16(Ydec * d) + Y;
+            int d = 10, Xp = Convert.ToInt16(Xdec * d) + X, Yp = -Convert.ToInt16(Ydec * d) + Y;
             for (int i = X; i < Xmax; i += d)
             {
                 graph.graph.DrawLine(penAxis, i, Y - 1, i, Y + 1);
